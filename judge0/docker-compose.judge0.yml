@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  judge0-server:
+    image: judge0/judge0:1.13.1
+    volumes:
+      - ./judge0.conf:/judge0.conf:ro
+    ports:
+      - "2358:2358"
+    privileged: true
+    restart: always
+    environment:
+      - REDIS_PASSWORD=judge0_redis_pass
+      - REDIS_HOST=judge0-redis
+      - POSTGRES_USER=judge0
+      - POSTGRES_PASSWORD=judge0_pg_pass
+      - POSTGRES_DB=judge0
+      - POSTGRES_HOST=judge0-postgres
+    depends_on:
+      judge0-postgres:
+        condition: service_healthy
+      judge0-redis:
+        condition: service_healthy
+
+  judge0-worker:
+    image: judge0/judge0:1.13.1
+    command: ["./scripts/workers"]
+    volumes:
+      - ./judge0.conf:/judge0.conf:ro
+    privileged: true
+    restart: always
+    environment:
+      - REDIS_PASSWORD=judge0_redis_pass
+      - REDIS_HOST=judge0-redis
+      - POSTGRES_USER=judge0
+      - POSTGRES_PASSWORD=judge0_pg_pass
+      - POSTGRES_DB=judge0
+      - POSTGRES_HOST=judge0-postgres
+    depends_on:
+      judge0-postgres:
+        condition: service_healthy
+      judge0-redis:
+        condition: service_healthy
+
+  judge0-postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=judge0
+      - POSTGRES_PASSWORD=judge0_pg_pass
+      - POSTGRES_DB=judge0
+    volumes:
+      - judge0-postgres-data:/data/postgres
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U judge0"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  judge0-redis:
+    image: redis:7.0
+    command: [
+      "bash", "-c",
+      'docker-entrypoint.sh --appendonly yes --requirepass "$$REDIS_PASSWORD"'
+    ]
+    environment:
+      - REDIS_PASSWORD=judge0_redis_pass
+    volumes:
+      - judge0-redis-data:/data
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "judge0_redis_pass", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  judge0-postgres-data:
+  judge0-redis-data:

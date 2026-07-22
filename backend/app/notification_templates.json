@@ -1,0 +1,32 @@
+{
+    "streak_warning": {
+        "roast": [
+            "Your streak is crying. Are you really going to let it die today?",
+            "Skill issue? Log in and solve a problem before your streak resets to 0.",
+            "I've seen better consistency from a random number generator. Fix your streak.",
+            "Touch grass tomorrow. Today, you need to save your streak."
+        ],
+        "encouraging": [
+            "You've worked so hard on this streak! Don't let it slip away today.",
+            "Just one small problem is all it takes to keep your momentum going!",
+            "You can do it! Keep the streak alive!"
+        ],
+        "neutral": [
+            "Reminder: Your daily streak will expire soon.",
+            "Your streak is at risk. Please complete a daily task."
+        ]
+    },
+    "badge_earned": {
+        "roast": [
+            "Wow, a shiny badge. Don't let it go to your head.",
+            "You actually did it? I'm as surprised as you are. Congrats on the badge."
+        ],
+        "encouraging": [
+            "Incredible work! You just unlocked a new badge!",
+            "You're crushing it! Enjoy your new badge!"
+        ],
+        "neutral": [
+            "You have earned a new badge."
+        ]
+    }
+}
