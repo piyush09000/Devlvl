@@ -88,7 +88,7 @@ Health check: http://localhost:5000/health
 ```powershell
 cd d:\devlvl\backend
 .\venv\Scripts\activate
-celery -A app.extensions.celery worker --loglevel=info
+celery -A celery_worker.celery worker --pool=eventlet --loglevel=info
 ```
 > Handles background tasks: XP awards, quest completion, notifications.
 
@@ -98,7 +98,7 @@ celery -A app.extensions.celery worker --loglevel=info
 ```powershell
 cd d:\devlvl\backend
 .\venv\Scripts\activate
-celery -A app.extensions.celery beat --loglevel=info
+celery -A celery_worker.celery beat --loglevel=info
 ```
 > Handles timed jobs: daily quest rotation, streak reminders.
 
